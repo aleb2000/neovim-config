@@ -46,6 +46,15 @@ require('packer').startup(function(use) -- Packer can manage itself
 
 	use 'jubnzv/virtual-types.nvim'
 
+	use {
+		"folke/trouble.nvim",
+		requires = "kyazdani42/nvim-web-devicons",
+		config = function()
+			require("trouble").setup {
+			}
+		end
+	}
+
 	-- Indent lines
 	use "lukas-reineke/indent-blankline.nvim"
 
@@ -59,6 +68,11 @@ require('packer').startup(function(use) -- Packer can manage itself
 	use {
 		'nvim-telescope/telescope.nvim', tag = '0.1.0',
 		requires = { {'nvim-lua/plenary.nvim'} }
+	}
+
+	use {
+		"nvim-telescope/telescope-file-browser.nvim",
+		requires = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" }
 	}
 
 	use { 'nvim-telescope/telescope-fzf-native.nvim' , run = 'make' }
@@ -94,3 +108,8 @@ require('colorizer').setup {}
 require('config-dashboard')
 require('config-telescope')
 require("scrollbar").setup()
+
+-- Trouble keymaps
+vim.keymap.set('n', '<leader>tt', '<CMD>TroubleToggle<CR>', { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>tw', '<CMD>TroubleToggle workspace_diagnostics<CR>', { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>td', '<CMD>TroubleToggle document_diagnostics<CR>', { noremap = true, silent = true })
