@@ -2,15 +2,22 @@
 require("mason").setup()
 require("mason-lspconfig").setup()
 
+
+-- Set up lspconfig.
+local capabilities = require('cmp_nvim_lsp').default_capabilities()
+
 require("mason-lspconfig").setup_handlers {
 	-- The first entry (without a key) will be the default handler
 	-- and will be called for each installed server that doesn't have
 	-- a dedicated handler.
 	function (server_name) -- default handler
-		require("lspconfig")[server_name].setup {on_attach=require'virtualtypes'.on_attach}
+		require("lspconfig")[server_name].setup {
+			on_attach=require'virtualtypes'.on_attach,
+			capabilities = capabilities
+		}
 	end,
 
-	['sumneko_lua'] = function (server_name) -- dedicated handler
+	['lua_ls'] = function (server_name) -- dedicated handler
 		require("lspconfig")[server_name].setup {
 			settings = {
 				Lua = {
@@ -29,6 +36,7 @@ require("mason-lspconfig").setup_handlers {
 					},
 				},
 			},
+			capabilities = capabilities
 		}
 	end,
 }
