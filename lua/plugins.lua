@@ -55,6 +55,8 @@ require('packer').startup(function(use) -- Packer can manage itself
 		end
 	}
 
+	use { "ray-x/lsp_signature.nvim" }
+
 	-- Indent lines
 	use "lukas-reineke/indent-blankline.nvim"
 

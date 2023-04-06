@@ -42,3 +42,10 @@ require('nvim-lightbulb').setup({ autocmd = { enabled = true } })
 --vim.cmd [[hi DiagnosticsWarn guifg=orange gui=bold,italic,underline]]
 --vim.cmd [[hi LspDiagnosticsVirtualTextInformation guifg=yellow gui=bold,italic,underline]]
 --vim.cmd [[hi LspDiagnosticsVirtualTextHint guifg=green gui=bold,italic,underline]]
+
+require "lsp_signature".setup({
+	bind = true, -- This is mandatory, otherwise border config won't get registered.
+	handler_opts = {
+		border = "rounded"
+	}
+})
