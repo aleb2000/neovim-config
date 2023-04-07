@@ -61,8 +61,14 @@ require('packer').startup(function(use) -- Packer can manage itself
     }
 
 	-- Snippets
-	use 'hrsh7th/vim-vsnip'
+	use {
+		'hrsh7th/vim-vsnip',
+		requires = {
+			'hrsh7th/vim-vsnip-integ'
+		}
+	}
 	use 'honza/vim-snippets'
+	use "rafamadriz/friendly-snippets"
 
     -- Indent lines
     use "lukas-reineke/indent-blankline.nvim"
