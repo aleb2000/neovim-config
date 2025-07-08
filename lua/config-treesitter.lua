@@ -1,4 +1,4 @@
-require'nvim-treesitter.configs'.setup {
+require("nvim-treesitter.configs").setup({
 	highlight = {
 		enable = true,
 		-- Setting this to true will run `:h syntax` and tree-sitter at the same time.
@@ -8,7 +8,7 @@ require'nvim-treesitter.configs'.setup {
 		additional_vim_regex_highlighting = false,
 	},
 	indent = {
-		enable = true
+		enable = true,
 	},
 	incremental_selection = {
 		enable = true,
@@ -19,16 +19,22 @@ require'nvim-treesitter.configs'.setup {
 			node_decremental = "grm",
 		},
 	},
-}
-
--- Folding
-vim.api.nvim_create_autocmd({'BufEnter','BufAdd','BufNew','BufNewFile','BufWinEnter'}, {
-  group = vim.api.nvim_create_augroup('TS_FOLD_WORKAROUND', {}),
-  callback = function()
-    vim.opt.foldmethod     = 'expr'
-    vim.opt.foldexpr       = 'nvim_treesitter#foldexpr()'
-  end
+	autotag = {
+		enable = true,
+		enable_rename = true,
+		enable_close = true,
+		enable_close_on_slash = true,
+		filetypes = { "html", "xml", "rs" },
+	},
 })
 
-vim.cmd [[set nofoldenable]]
+-- Folding
+vim.api.nvim_create_autocmd({ "BufEnter", "BufAdd", "BufNew", "BufNewFile", "BufWinEnter" }, {
+	group = vim.api.nvim_create_augroup("TS_FOLD_WORKAROUND", {}),
+	callback = function()
+		vim.opt.foldmethod = "expr"
+		vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+	end,
+})
 
+vim.cmd([[set nofoldenable]])

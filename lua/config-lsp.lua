@@ -1,3 +1,8 @@
+local _border = "rounded"
+
+-- We have native inlay hints now, yay!
+vim.lsp.inlay_hint.enable(true)
+
 -- Mason
 require("mason").setup()
 require("mason-lspconfig").setup()
@@ -11,7 +16,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
 		-- Buffer local mappings.
 		-- See `:help vim.lsp.*` for documentation on any of the below functions
-		local opts = { buffer = ev.buf }
+		local opts = { buffer = ev.buf, remap = false }
 		vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
 		vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
 		vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
@@ -37,7 +42,10 @@ local server_settings = {
 	tailwindcss = {
 		tailwindCSS = {
 			experimental = {
-				classRegex = { 'class: "(.*)"' },
+				classRegex = {
+					-- Yew "classes!()" macro
+					{ "classes!\\(([^)]*)\\)", '"([^"]*)"' },
+				},
 			},
 			includeLanguages = {
 				rust = "html",
@@ -57,7 +65,17 @@ local server_settings = {
 			telemetry = { enable = false },
 		},
 	},
+	html = {
+		html = {
+			format = {
+				templating = true,
+			},
+		},
+	},
 }
+
+-- Enable GTK Blueprint support
+require("lspconfig").blueprint_ls.setup({})
 
 local mason_lspconfig = require("mason-lspconfig")
 
@@ -78,6 +96,9 @@ mason_lspconfig.setup_handlers({
 	["tailwindcss"] = function(server_name)
 		require("lspconfig")[server_name].setup({
 			capabilities = capabilities,
+			on_attach = function(client, bufnr)
+				require("tailwindcss-colors").buf_attach(bufnr)
+			end,
 			settings = server_settings[server_name],
 			init_options = {
 				userLanguages = {
@@ -100,10 +121,28 @@ mason_lspconfig.setup_handlers({
 			},
 		})
 	end,
+	["html"] = function(server_name)
+		require("lspconfig")[server_name].setup({
+			capabilities = capabilities,
+			settings = server_settings[server_name],
+			init_options = {
+				userLanguages = {
+					rust = "html",
+				},
+			},
+			filetypes = {
+				"html",
+				"javascript",
+				"javascriptreact",
+				"typescript",
+				"typescriptreact",
+				"svelte",
+				"vue",
+				"rust",
+			},
+		})
+	end,
 })
-
-local bufopts = { noremap = true, silent = true }
-vim.keymap.set("n", "<leader>ca", ":CodeActionMenu<CR>", bufopts)
 
 require("nvim-lightbulb").setup({ autocmd = { enabled = true } })
 
@@ -114,21 +153,23 @@ require("nvim-lightbulb").setup({ autocmd = { enabled = true } })
 
 require("lsp_signature").setup({
 	bind = true, -- This is mandatory, otherwise border config won't get registered.
-	handler_opts = { border = "rounded" },
+	handler_opts = { border = _border },
 })
 
--- Inlay hints
-local rt = require("rust-tools")
 
-rt.setup({
-	tools = {
-		inlay_hints = { auto = true },
-	},
-	server = {
-		on_attach = function(c, bufnr)
-			-- Hover actions
-			vim.keymap.set("n", "<C-space>", rt.hover_actions.hover_actions, { buffer = bufnr })
-		end,
-	},
+-- Borders on LSP windows
+vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
+	border = _border,
 })
-rt.inlay_hints.enable()
+
+vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, {
+	border = _border,
+})
+
+vim.diagnostic.config({
+	float = { border = _border },
+})
+
+require("lspconfig.ui.windows").default_options = {
+	border = _border,
+}

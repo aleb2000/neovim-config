@@ -1,4 +1,15 @@
-vim.cmd([[packadd packer.nvim]])
+local ensure_packer = function()
+	local fn = vim.fn
+	local install_path = fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
+	if fn.empty(fn.glob(install_path)) > 0 then
+		fn.system({ "git", "clone", "--depth", "1", "https://github.com/wbthomason/packer.nvim", install_path })
+		vim.cmd([[packadd packer.nvim]])
+		return true
+	end
+	return false
+end
+
+local packer_bootstrap = ensure_packer()
 
 require("packer").startup(function(use) -- Packer can manage itself
 	use("wbthomason/packer.nvim")
@@ -18,6 +29,7 @@ require("packer").startup(function(use) -- Packer can manage itself
 			ts_update()
 		end,
 	})
+	use("windwp/nvim-ts-autotag")
 
 	-- Colors theme
 	use("bluz71/vim-nightfly-colors")
@@ -36,7 +48,9 @@ require("packer").startup(function(use) -- Packer can manage itself
 		"neovim/nvim-lspconfig",
 	})
 
-	use("weilbith/nvim-code-action-menu")
+	use({
+		"aznhe21/actions-preview.nvim",
+	})
 
 	use("kosayoda/nvim-lightbulb")
 
@@ -49,8 +63,21 @@ require("packer").startup(function(use) -- Packer can manage itself
 	})
 
 	use({ "ray-x/lsp_signature.nvim" })
+	use({ "mrcjkb/rustaceanvim" })
+	use({ "mfussenegger/nvim-dap" })
+	use({ "rcarriga/nvim-dap-ui",
+		requires = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" } ,
+		config = function()
+			require("dapui").setup()
+		end,
+	})
 
-	use("simrat39/rust-tools.nvim")
+	use({
+		"stevearc/overseer.nvim",
+		config = function()
+			require("overseer").setup()
+		end,
+	})
 
 	-- Code completion
 	-- Thanks https://gist.github.com/mengwangk/e5b64dbbeadc81b0129f274908a7b692
@@ -83,15 +110,12 @@ require("packer").startup(function(use) -- Packer can manage itself
 	use("lukas-reineke/indent-blankline.nvim")
 
 	-- Copilot
-	use("github/copilot.vim")
-
-	-- File explorer
-	use({ "ms-jpq/chadtree", branch = "chad", run = "python3 -m chadtree deps" })
+	--use("github/copilot.vim")
 
 	-- Telescope
 	use({
 		"nvim-telescope/telescope.nvim",
-		tag = "0.1.0",
+		tag = "0.1.5",
 		requires = { { "nvim-lua/plenary.nvim" } },
 	})
 
@@ -101,6 +125,7 @@ require("packer").startup(function(use) -- Packer can manage itself
 	})
 
 	use({ "nvim-telescope/telescope-fzf-native.nvim", run = "make" })
+	use({ "stevearc/dressing.nvim" })
 
 	-- Git
 	use({
@@ -123,10 +148,17 @@ require("packer").startup(function(use) -- Packer can manage itself
 		end,
 	})
 	use("paretje/nvim-man")
+	use({
+		"themaxmarchuk/tailwindcss-colors.nvim",
+	})
 end)
 
 vim.g.copilot_no_tab_map = true
+vim.b.copilot_enabled = false
 vim.api.nvim_set_keymap("i", "<C-J>", 'copilot#Accept("<CR>")', { silent = true, expr = true })
+
+vim.keymap.set("n", "<leader>ca", require("actions-preview").code_actions, { noremap = true })
+require("actions-preview").setup()
 
 -- Config plugins
 require("config-lualine")
@@ -139,17 +171,17 @@ require("config-tokyonight")
 require("config-nvim-cmp")
 require("config-lsp")
 require("config-indent")
-require("config-chadtree")
 require("colorizer").setup({})
 require("config-dashboard")
 require("config-telescope")
 require("scrollbar").setup()
 require("config-formatter")
+require("tailwindcss-colors").setup()
+require("config-dap")
 
 -- Trouble keymaps
-vim.keymap.set("n", "<leader>tt", "<CMD>TroubleToggle<CR>", { noremap = true, silent = true })
-vim.keymap.set("n", "<leader>tw", "<CMD>TroubleToggle workspace_diagnostics<CR>", { noremap = true, silent = true })
-vim.keymap.set("n", "<leader>td", "<CMD>TroubleToggle document_diagnostics<CR>", { noremap = true, silent = true })
+vim.keymap.set("n", "<leader>tt", "<CMD>Trouble diagnostics toggle<CR>", { noremap = true, silent = true })
+vim.keymap.set("n", "<leader>tT", "<CMD>Trouble diagnostics filter.buf=0<CR>", { noremap = true, silent = true })
 
 -- Man
 vim.g.nvim_man_default_target = "tab"
