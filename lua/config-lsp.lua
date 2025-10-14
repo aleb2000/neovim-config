@@ -75,15 +75,13 @@ local server_settings = {
 }
 
 -- Enable GTK Blueprint support
-require("lspconfig").blueprint_ls.setup({})
+local lspconfig = require("lspconfig")
+lspconfig.blueprint_ls.setup({})
 
 local mason_lspconfig = require("mason-lspconfig")
 
 mason_lspconfig.setup({
 	ensure_installed = vim.tbl_keys(server_settings),
-})
-
-mason_lspconfig.setup_handlers({
 	-- The first entry (without a key) will be the default handler
 	-- and will be called for each installed server that doesn't have
 	-- a dedicated handler.
@@ -144,6 +142,34 @@ mason_lspconfig.setup_handlers({
 	end,
 })
 
+-- Hopefully these rust-analyzer settings should improve performance
+lspconfig["rust-analyzer"].setup({
+	on_attach = function() end,
+	settings = {
+		["rust-analyzer"] = {
+			imports = {
+				granularity = {
+					group = "module",
+				},
+				prefix = "self",
+			},
+			cargo = {
+				buildScripts = {
+					enable = true,
+				},
+			},
+			procMacro = {
+				enable = true,
+			},
+			diagnostics = {
+				experimental = {
+					enable = true,
+				},
+			},
+		},
+	},
+})
+
 require("nvim-lightbulb").setup({ autocmd = { enabled = true } })
 
 -- vim.cmd [[hi LspDiagnosticsVirtualTextError guifg=#db4b4b gui=bold,italic,underline]]
@@ -155,7 +181,6 @@ require("lsp_signature").setup({
 	bind = true, -- This is mandatory, otherwise border config won't get registered.
 	handler_opts = { border = _border },
 })
-
 
 -- Borders on LSP windows
 vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {

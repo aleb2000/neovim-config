@@ -65,8 +65,9 @@ require("packer").startup(function(use) -- Packer can manage itself
 	use({ "ray-x/lsp_signature.nvim" })
 	use({ "mrcjkb/rustaceanvim" })
 	use({ "mfussenegger/nvim-dap" })
-	use({ "rcarriga/nvim-dap-ui",
-		requires = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" } ,
+	use({
+		"rcarriga/nvim-dap-ui",
+		requires = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" },
 		config = function()
 			require("dapui").setup()
 		end,
@@ -151,6 +152,7 @@ require("packer").startup(function(use) -- Packer can manage itself
 	use({
 		"themaxmarchuk/tailwindcss-colors.nvim",
 	})
+	use("szymonwilczek/vim-be-better")
 end)
 
 vim.g.copilot_no_tab_map = true
