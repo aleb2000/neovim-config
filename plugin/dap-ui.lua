@@ -23,3 +23,12 @@ end
 -- dap.listeners.before.event_exited.dapui_config = function()
 -- 	ui.close()
 -- end
+--
+
+vim.api.nvim_create_user_command("DapUiOpen", function(opts)
+	dapui.open()
+end, { desc = "Open the DAP UI" })
+
+vim.api.nvim_create_user_command("DapUiClose", function(opts)
+	dapui.close()
+end, { desc = "Close the DAP UI" })
