@@ -22,6 +22,9 @@ vim.o.tabstop = 4
 vim.o.shiftwidth = 4
 vim.o.expandtab = false
 
+-- Start with all folds open by default
+vim.o.foldlevelstart = 99
+
 vim.cmd([[
 if (empty($TMUX))
   if (has("nvim"))

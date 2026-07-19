@@ -18,6 +18,9 @@ vim.api.nvim_create_autocmd("FileType", {
 	callback = function(args)
 		local filetype = args.match
 		treesitter_start(filetype)
+		-- Fold method is managed by nvim-origami, uncomment this if you uninstall origami
+		-- vim.wo[0][0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
+		-- vim.wo[0][0].foldmethod = "expr"
 	end,
 })
 
