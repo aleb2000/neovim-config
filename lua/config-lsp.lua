@@ -39,6 +39,42 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
 local server_settings = {
+	tailwindcss = {
+		tailwindCSS = {
+			experimental = {
+				classRegex = {
+					-- Yew "classes!()" macro
+					{ "classes!\\(([^)]*)\\)", '"([^"]*)"' },
+				},
+			},
+			includeLanguages = {
+				rust = "html",
+			},
+		},
+
+		on_attach = function(client, bufnr)
+			require("tailwindcss-colors").buf_attach(bufnr)
+		end,
+		init_options = {
+			userLanguages = {
+				rust = "html",
+			},
+		},
+		filetypes = {
+			"css",
+			"scss",
+			"sass",
+			"postcss",
+			"html",
+			"javascript",
+			"javascriptreact",
+			"typescript",
+			"typescriptreact",
+			"svelte",
+			"vue",
+			"rust",
+		},
+	},
 	lua_ls = {
 		Lua = {
 			runtime = {
@@ -58,15 +94,35 @@ local server_settings = {
 				templating = true,
 			},
 		},
+		init_options = {
+			userLanguages = {
+				rust = "html",
+			},
+		},
+		filetypes = {
+			"html",
+			"javascript",
+			"javascriptreact",
+			"typescript",
+			"typescriptreact",
+			"svelte",
+			"vue",
+			"rust",
+		},
+	},
+	ruby_lsp = {
+		init_options = {
+			formatter = "standard",
+			linters = { "standard" },
+		},
 	},
 }
 
--- Enable GTK Blueprint support
-local lspconfig = require("lspconfig")
+for lsp_name, config in pairs(server_settings) do
+	vim.lsp.config(lsp_name, config)
+end
 
-local mason_lspconfig = require("mason-lspconfig")
-
-mason_lspconfig.setup({
+require("mason-lspconfig").setup({
 	ensure_installed = vim.tbl_keys(server_settings),
 	-- The first entry (without a key) will be the default handler
 	-- and will be called for each installed server that doesn't have
@@ -99,7 +155,6 @@ mason_lspconfig.setup({
 		})
 	end,
 })
-
 require("nvim-lightbulb").setup({ autocmd = { enabled = true } })
 
 -- vim.cmd [[hi LspDiagnosticsVirtualTextError guifg=#db4b4b gui=bold,italic,underline]]
