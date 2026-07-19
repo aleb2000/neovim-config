@@ -12,12 +12,13 @@ require("nvim-treesitter.configs").setup({
 	},
 	incremental_selection = {
 		enable = true,
-		keymaps = {
-			init_selection = "gnn",
-			node_incremental = "grn",
-			scope_incremental = "grc",
-			node_decremental = "grm",
-		},
+		-- Removed keymaps as they slow down the "gn" command and I am not using them anyway
+		-- keymaps = {
+		-- 	init_selection = "gnn",
+		-- 	node_incremental = "grn",
+		-- 	scope_incremental = "grc",
+		-- 	node_decremental = "grm",
+		-- },
 	},
 	autotag = {
 		enable = true,
@@ -27,14 +28,3 @@ require("nvim-treesitter.configs").setup({
 		filetypes = { "html", "xml", "rs" },
 	},
 })
-
--- Folding
-vim.api.nvim_create_autocmd({ "BufEnter", "BufAdd", "BufNew", "BufNewFile", "BufWinEnter" }, {
-	group = vim.api.nvim_create_augroup("TS_FOLD_WORKAROUND", {}),
-	callback = function()
-		vim.opt.foldmethod = "expr"
-		vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
-	end,
-})
-
-vim.cmd([[set nofoldenable]])

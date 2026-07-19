@@ -39,19 +39,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
 local server_settings = {
-	tailwindcss = {
-		tailwindCSS = {
-			experimental = {
-				classRegex = {
-					-- Yew "classes!()" macro
-					{ "classes!\\(([^)]*)\\)", '"([^"]*)"' },
-				},
-			},
-			includeLanguages = {
-				rust = "html",
-			},
-		},
-	},
 	lua_ls = {
 		Lua = {
 			runtime = {
@@ -76,7 +63,6 @@ local server_settings = {
 
 -- Enable GTK Blueprint support
 local lspconfig = require("lspconfig")
-lspconfig.blueprint_ls.setup({})
 
 local mason_lspconfig = require("mason-lspconfig")
 
@@ -89,34 +75,6 @@ mason_lspconfig.setup({
 		require("lspconfig")[server_name].setup({
 			capabilities = capabilities,
 			settings = server_settings[server_name],
-		})
-	end,
-	["tailwindcss"] = function(server_name)
-		require("lspconfig")[server_name].setup({
-			capabilities = capabilities,
-			on_attach = function(client, bufnr)
-				require("tailwindcss-colors").buf_attach(bufnr)
-			end,
-			settings = server_settings[server_name],
-			init_options = {
-				userLanguages = {
-					rust = "html",
-				},
-			},
-			filetypes = {
-				"css",
-				"scss",
-				"sass",
-				"postcss",
-				"html",
-				"javascript",
-				"javascriptreact",
-				"typescript",
-				"typescriptreact",
-				"svelte",
-				"vue",
-				"rust",
-			},
 		})
 	end,
 	["html"] = function(server_name)
@@ -140,34 +98,6 @@ mason_lspconfig.setup({
 			},
 		})
 	end,
-})
-
--- Hopefully these rust-analyzer settings should improve performance
-lspconfig["rust-analyzer"].setup({
-	on_attach = function() end,
-	settings = {
-		["rust-analyzer"] = {
-			imports = {
-				granularity = {
-					group = "module",
-				},
-				prefix = "self",
-			},
-			cargo = {
-				buildScripts = {
-					enable = true,
-				},
-			},
-			procMacro = {
-				enable = true,
-			},
-			diagnostics = {
-				experimental = {
-					enable = true,
-				},
-			},
-		},
-	},
 })
 
 require("nvim-lightbulb").setup({ autocmd = { enabled = true } })
@@ -198,3 +128,25 @@ vim.diagnostic.config({
 require("lspconfig.ui.windows").default_options = {
 	border = _border,
 }
+
+-- linting
+local lint = require('lint')
+
+
+lint.linters_by_ft = {
+	yaml = {'cfn_lint'},
+}
+
+lint.linters.cfn_lint.stdin = false
+
+vim.api.nvim_create_autocmd({ "BufWritePost" }, {
+  callback = function()
+
+    -- try_lint without arguments runs the linters defined in `linters_by_ft`
+    -- for the current filetype
+    lint.try_lint()
+  end,
+})
+
+require("mason-nvim-lint").setup()
+

@@ -22,8 +22,10 @@ require("formatter").setup({
 		rust = { require("formatter.filetypes.rust").rustfmt },
 		lua = { require("formatter.filetypes.lua").stylua },
 		python = { require("formatter.filetypes.python").black },
-		html = { require("formatter.filetypes.html").prettierd },
-		json = { require("formatter.filetypes.json").prettierd },
-		javascript = { require("formatter.filetypes.javascript").prettierd },
+		html = { require("formatter.filetypes.html").prettier },
+		json = { require("formatter.filetypes.json").prettier },
+		javascript = { require("formatter.filetypes.javascript").prettier },
+		typescript = { require("formatter.filetypes.typescript").prettier },
+		ruby = { require("formatter.filetypes.ruby").rubocop },
 	},
 })
