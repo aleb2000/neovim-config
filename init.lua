@@ -1,27 +1,28 @@
 -- Globals
-vim.g.mapleader = ';'
-vim.opt.scl = 'yes'
+vim.g.mapleader = " "
+vim.o.scl = "yes"
 
 -- Options
-vim.opt.number = true
-vim.opt.showmatch = true
-vim.opt.mouse = 'a'
-vim.opt.encoding = 'UTF-8'
-vim.opt.termguicolors = true
-vim.opt.cursorline = true
-vim.opt.scrolloff = 5
-vim.opt.wildmode = 'list:longest,list:full'
+vim.o.number = true
+vim.o.showmatch = true
+vim.o.mouse = "a"
+vim.o.mousescroll = "ver:1"
+vim.o.encoding = "UTF-8"
+vim.o.termguicolors = true
+vim.o.cursorline = true
+vim.o.scrolloff = 5
+vim.o.wildmode = "list:longest,list:full"
 
 -- Search options
-vim.opt.ignorecase = true
-vim.opt.smartcase = true
-vim.opt.hlsearch = false
+vim.o.ignorecase = true
+vim.o.smartcase = true
+vim.o.hlsearch = false
 -- Indentation
-vim.opt.tabstop = 4
-vim.opt.shiftwidth = 4
-vim.opt.expandtab = false
+vim.o.tabstop = 4
+vim.o.shiftwidth = 4
+vim.o.expandtab = false
 
-vim.cmd [[
+vim.cmd([[
 if (empty($TMUX))
   if (has("nvim"))
     let $NVIM_TUI_ENABLE_TRUE_COLOR=1
@@ -30,8 +31,24 @@ if (empty($TMUX))
     set termguicolors
   endif
 endif
-]]
+]])
 
-require('plugins')
+-- helper used when adding plugins with vim.pack
+function gh(x)
+	return "https://github.com/" .. x
+end
 
-vim.cmd [[colorscheme tokyonight]]
+vim.api.nvim_create_user_command("PackUpdate", function(opts)
+	vim.pack.update()
+end, { desc = "Update vim.pack packages, perform :write on the confirmation buffer to apply the updates" })
+
+-- require("plugins")
+require("new-config.plugins.treesitter")
+require("new-config.themes")
+require("new-config.plugins.lspconfig")
+require("new-config.plugins.mason")
+require("new-config.plugins.mini-completion")
+require("new-config.plugins.telescope")
+require("new-config.plugins.web-devicons")
+require("new-config.plugins.oil")
+require("new-config.plugins.conform")
