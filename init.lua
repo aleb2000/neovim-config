@@ -33,6 +33,16 @@ if (empty($TMUX))
 endif
 ]])
 
+-- Delete trailing whitespace on save
+vim.api.nvim_create_autocmd({ "BufWritePre" }, {
+	pattern = { "*" },
+	callback = function(ev)
+		local save_cursor = vim.fn.getpos(".")
+		vim.cmd([[%s/\s\+$//e]])
+		vim.fn.setpos(".", save_cursor)
+	end,
+})
+
 -- helper used when adding plugins with vim.pack
 function gh(x)
 	return "https://github.com/" .. x
