@@ -12,6 +12,10 @@
       "rev": "154eb5ff5b96d0641307113fa385eaf0d36d9796",
       "src": "https://github.com/ellisonleao/gruvbox.nvim"
     },
+    "inlay-hint-trim.nvim": {
+      "rev": "febf997521539d53f8c1dc71622ce23d9e563fd1",
+      "src": "https://github.com/Ray-D-Song/inlay-hint-trim.nvim"
+    },
     "mason-lspconfig.nvim": {
       "rev": "47059d71b42d74b0a1e9f61c1d99d301039c3b5b",
       "src": "https://github.com/mason-org/mason-lspconfig.nvim"
