@@ -32,3 +32,20 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		-- end
 	end,
 })
+
+vim.lsp.config("ts_ls", {
+	settings = {
+		typescript = {
+			inlayHints = {
+				includeInlayParameterNameHints = "literals", -- 'none' | 'literals' | 'all'
+				includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+				includeInlayFunctionParameterTypeHints = true,
+				includeInlayVariableTypeHints = true,
+				includeInlayVariableTypeHintsWhenTypeMatchesName = false,
+				includeInlayPropertyDeclarationTypeHints = true,
+				includeInlayFunctionLikeReturnTypeHints = true,
+				includeInlayEnumMemberValueHints = true,
+			},
+		},
+	},
+})
