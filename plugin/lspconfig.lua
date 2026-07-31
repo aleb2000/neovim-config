@@ -19,6 +19,10 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		lsp_keymap_set("textDocument/definition", "n", "gd", vim.lsp.buf.definition)
 		lsp_keymap_set("textDocument/implementation", "n", "gi", vim.lsp.buf.implementation)
 
+		if client:supports_method("textDocument/inlayHint") then
+			vim.lsp.inlay_hint.enable(true)
+		end
+
 		-- Enable auto-completion. Note: Use CTRL-Y to select an item. |complete_CTRL-Y|
 		-- if client:supports_method("textDocument/completion") then
 		-- Optional: trigger autocompletion on EVERY keypress. May be slow!
@@ -27,4 +31,21 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		-- 	vim.lsp.completion.enable(true, client.id, ev.buf, { autotrigger = true })
 		-- end
 	end,
+})
+
+vim.lsp.config("ts_ls", {
+	settings = {
+		typescript = {
+			inlayHints = {
+				includeInlayParameterNameHints = "literals", -- 'none' | 'literals' | 'all'
+				includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+				includeInlayFunctionParameterTypeHints = true,
+				includeInlayVariableTypeHints = true,
+				includeInlayVariableTypeHintsWhenTypeMatchesName = false,
+				includeInlayPropertyDeclarationTypeHints = true,
+				includeInlayFunctionLikeReturnTypeHints = true,
+				includeInlayEnumMemberValueHints = true,
+			},
+		},
+	},
 })
