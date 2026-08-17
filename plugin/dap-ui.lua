@@ -1,7 +1,7 @@
 vim.pack.add({
-	gh("mfussenegger/nvim-dap"),
-	gh("rcarriga/nvim-dap-ui"),
-	gh("nvim-neotest/nvim-nio"),
+	GH("mfussenegger/nvim-dap"),
+	GH("rcarriga/nvim-dap-ui"),
+	GH("nvim-neotest/nvim-nio"),
 })
 
 local dap = require("dap")

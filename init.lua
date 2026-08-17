@@ -46,8 +46,8 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
 	end,
 })
 
--- helper used when adding plugins with vim.pack
-function gh(x)
+-- Helper used when adding plugins with vim.pack from GitHub
+function GH(x)
 	return "https://github.com/" .. x
 end
 

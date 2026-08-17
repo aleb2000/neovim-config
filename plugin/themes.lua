@@ -1,6 +1,6 @@
 vim.pack.add({
-	gh("folke/tokyonight.nvim"),
-	gh("ellisonleao/gruvbox.nvim"),
+	GH("folke/tokyonight.nvim"),
+	GH("ellisonleao/gruvbox.nvim"),
 })
 
 vim.cmd([[colorscheme gruvbox]])

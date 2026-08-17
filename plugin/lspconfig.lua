@@ -1,5 +1,5 @@
 vim.pack.add({
-	gh("neovim/nvim-lspconfig"),
+	GH("neovim/nvim-lspconfig"),
 })
 
 vim.api.nvim_create_autocmd("LspAttach", {

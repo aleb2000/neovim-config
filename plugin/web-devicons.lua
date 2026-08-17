@@ -1,3 +1,3 @@
 vim.pack.add({
-	gh("nvim-tree/nvim-web-devicons"),
+	GH("nvim-tree/nvim-web-devicons"),
 })

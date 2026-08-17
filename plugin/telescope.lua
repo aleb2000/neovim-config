@@ -1,9 +1,9 @@
 vim.pack.add({
-	{ src = gh("nvim-telescope/telescope.nvim"), version = vim.version.range("0.2") },
+	{ src = GH("nvim-telescope/telescope.nvim"), version = vim.version.range("0.2") },
 
 	-- Dependencies
-	gh("nvim-lua/plenary.nvim"),
-	gh("nvim-telescope/telescope-fzf-native.nvim"),
+	GH("nvim-lua/plenary.nvim"),
+	GH("nvim-telescope/telescope-fzf-native.nvim"),
 })
 
 -- Make telescope-fzf-native on update

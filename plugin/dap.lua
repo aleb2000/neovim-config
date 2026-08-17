@@ -1,5 +1,5 @@
 vim.pack.add({
-	gh("mfussenegger/nvim-dap"),
+	GH("mfussenegger/nvim-dap"),
 })
 
 local dap = require("dap")

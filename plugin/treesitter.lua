@@ -1,5 +1,5 @@
 vim.pack.add({
-	gh("nvim-treesitter/nvim-treesitter"),
+	GH("nvim-treesitter/nvim-treesitter"),
 })
 
 local nvim_treesitter = require("nvim-treesitter")

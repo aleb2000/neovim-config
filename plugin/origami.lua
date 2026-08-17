@@ -1,5 +1,5 @@
 vim.pack.add({
-	gh("chrisgrieser/nvim-origami"),
+	GH("chrisgrieser/nvim-origami"),
 })
 
 require("origami").setup({
