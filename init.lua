@@ -51,6 +51,18 @@ function GH(x)
 	return "https://github.com/" .. x
 end
 
-vim.api.nvim_create_user_command("PackUpdate", function(opts)
+vim.api.nvim_create_user_command("PackUpdate", function(_)
 	vim.pack.update()
 end, { desc = "Update vim.pack packages, perform :write on the confirmation buffer to apply the updates" })
+
+vim.api.nvim_create_user_command("PackClean", function(_)
+	local plugins = vim.pack.get()
+	local unusedPluginNames = {}
+	for _, plugin in ipairs(plugins) do
+		if not plugin.active then
+			table.insert(unusedPluginNames, plugin.spec.name)
+		end
+	end
+
+	vim.pack.del(unusedPluginNames)
+end, { desc = "Remove inactive plugins" })
