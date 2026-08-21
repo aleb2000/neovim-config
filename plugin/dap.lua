@@ -60,181 +60,45 @@ dap.adapters["pwa-node"] = {
 
 -- Configurations
 
-for _, language in ipairs({ "typescript", "javascript" }) do
-	dap.configurations[language] = {
-		{
-			type = "pwa-node",
-			request = "launch",
-			name = "npm test",
-			runtimeExecutable = "npm",
-			runtimeArgs = {
-				"run",
-				"test",
-				"--",
-				"--runInBand",
-			},
-			rootPath = "${workspaceFolder}",
-			cwd = "${workspaceFolder}",
-			console = "integratedTerminal",
-			internalConsoleOptions = "neverOpen",
-			sourceMaps = true,
-			resolveSourceMapLocations = {
-				"${workspaceFolder}/**",
-				"!**/node_modules/**",
-			},
-		},
-		{
-			type = "pwa-node",
-			request = "launch",
-			name = "npm test - Current File",
-			runtimeExecutable = "npm",
-			runtimeArgs = {
-				"run",
-				"test",
-				"--",
-				"--runInBand",
-				"${file}",
-			},
-			rootPath = "${workspaceFolder}",
-			cwd = "${workspaceFolder}",
-			console = "integratedTerminal",
-			internalConsoleOptions = "neverOpen",
-			sourceMaps = true,
-			resolveSourceMapLocations = {
-				"${workspaceFolder}/**",
-				"!**/node_modules/**",
-			},
-		},
-		{
-			type = "pwa-node",
-			request = "launch",
-			name = "npm test:integration",
-			runtimeExecutable = "npm",
-			runtimeArgs = {
-				"run",
-				"test:integration:run",
-				"--",
-				"--runInBand",
-			},
-			rootPath = "${workspaceFolder}",
-			cwd = "${workspaceFolder}",
-			console = "integratedTerminal",
-			internalConsoleOptions = "neverOpen",
-			sourceMaps = true,
-			resolveSourceMapLocations = {
-				"${workspaceFolder}/**",
-				"!**/node_modules/**",
-			},
-		},
-		{
-			type = "pwa-node",
-			request = "launch",
-			name = "npm test:integration - Current File",
-			runtimeExecutable = "npm",
-			runtimeArgs = {
-				"run",
-				"test:integration:run",
-				"--",
-				"--runInBand",
-				"${file}",
-			},
-			rootPath = "${workspaceFolder}",
-			cwd = "${workspaceFolder}",
-			console = "integratedTerminal",
-			internalConsoleOptions = "neverOpen",
-			sourceMaps = true,
-			resolveSourceMapLocations = {
-				"${workspaceFolder}/**",
-				"!**/node_modules/**",
-			},
-		},
+local npm_test_scripts = {
+	"test",
+	"test:integration:run",
+	"test:loud",
+	"test:integration:run:loud",
+}
 
-		-- Loud versions
-		{
-			type = "pwa-node",
-			request = "launch",
-			name = "npm test:loud",
-			runtimeExecutable = "npm",
-			runtimeArgs = {
-				"run",
-				"test:loud",
-				"--",
-				"--runInBand",
-			},
-			rootPath = "${workspaceFolder}",
-			cwd = "${workspaceFolder}",
-			console = "integratedTerminal",
-			internalConsoleOptions = "neverOpen",
-			sourceMaps = true,
-			resolveSourceMapLocations = {
-				"${workspaceFolder}/**",
-				"!**/node_modules/**",
-			},
-		},
-		{
-			type = "pwa-node",
-			request = "launch",
-			name = "npm test:loud - Current File",
-			runtimeExecutable = "npm",
-			runtimeArgs = {
-				"run",
-				"test:loud",
-				"--",
-				"--runInBand",
-				"${file}",
-			},
-			rootPath = "${workspaceFolder}",
-			cwd = "${workspaceFolder}",
-			console = "integratedTerminal",
-			internalConsoleOptions = "neverOpen",
-			sourceMaps = true,
-			resolveSourceMapLocations = {
-				"${workspaceFolder}/**",
-				"!**/node_modules/**",
-			},
-		},
-		{
-			type = "pwa-node",
-			request = "launch",
-			name = "npm test:integration:loud",
-			runtimeExecutable = "npm",
-			runtimeArgs = {
-				"run",
-				"test:integration:run:loud",
-				"--",
-				"--runInBand",
-			},
-			rootPath = "${workspaceFolder}",
-			cwd = "${workspaceFolder}",
-			console = "integratedTerminal",
-			internalConsoleOptions = "neverOpen",
-			sourceMaps = true,
-			resolveSourceMapLocations = {
-				"${workspaceFolder}/**",
-				"!**/node_modules/**",
-			},
-		},
-		{
-			type = "pwa-node",
-			request = "launch",
-			name = "npm test:integration:loud - Current File",
-			runtimeExecutable = "npm",
-			runtimeArgs = {
-				"run",
-				"test:integration:run:loud",
-				"--",
-				"--runInBand",
-				"${file}",
-			},
-			rootPath = "${workspaceFolder}",
-			cwd = "${workspaceFolder}",
-			console = "integratedTerminal",
-			internalConsoleOptions = "neverOpen",
-			sourceMaps = true,
-			resolveSourceMapLocations = {
-				"${workspaceFolder}/**",
-				"!**/node_modules/**",
-			},
+local function npm_test_config(script, current_file_only)
+	local runtime_args = { "run", script, "--", "--runInBand" }
+	local name = "npm " .. script
+	if current_file_only then
+		name = name .. " - Current File"
+		table.insert(runtime_args, "${file}")
+	end
+
+	return {
+		type = "pwa-node",
+		request = "launch",
+		name = name,
+		runtimeExecutable = "npm",
+		runtimeArgs = runtime_args,
+		rootPath = "${workspaceFolder}",
+		cwd = "${workspaceFolder}",
+		console = "integratedTerminal",
+		internalConsoleOptions = "neverOpen",
+		sourceMaps = true,
+		resolveSourceMapLocations = {
+			"${workspaceFolder}/**",
+			"!**/node_modules/**",
 		},
 	}
+end
+
+local npm_test_configs = {}
+for _, script in ipairs(npm_test_scripts) do
+	table.insert(npm_test_configs, npm_test_config(script, false))
+	table.insert(npm_test_configs, npm_test_config(script, true))
+end
+
+for _, language in ipairs({ "typescript", "javascript" }) do
+	dap.configurations[language] = npm_test_configs
 end
