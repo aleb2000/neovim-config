@@ -9,6 +9,7 @@ require("conform").setup({
 		rust = { "rustfmt" },
 		javascript = { "prettier" },
 		typescript = { "prettier" },
+		json = { "prettier" },
 		go = { "gofmt" },
 	},
 	format_on_save = {
