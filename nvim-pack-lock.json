@@ -4,6 +4,10 @@
       "rev": "016802de402556da54c36bd7359b441266b01cdd",
       "src": "https://github.com/stevearc/conform.nvim"
     },
+    "crazy-coverage.nvim": {
+      "rev": "60ef7aefb6c4fe0a5b263f6302cc7e932e7a77e8",
+      "src": "https://github.com/mr-u0b0dy/crazy-coverage.nvim"
+    },
     "friendly-snippets": {
       "rev": "6cd7280adead7f586db6fccbd15d2cac7e2188b9",
       "src": "https://github.com/rafamadriz/friendly-snippets"
