@@ -10,15 +10,24 @@ vim.pack.add({
 vim.api.nvim_create_autocmd("PackChanged", {
 	callback = function(ev)
 		if ev.data.spec.name == "telescope-fzf-native.nvim" then
-			local info = vim.pack.get({ "telescope-fzf-native.nvim" })
-			vim.system({ "make" }, { cwd = info.path })
+			local infos = vim.pack.get({ "telescope-fzf-native.nvim" })
+			for _, info in ipairs(infos) do
+				vim.system({ "make" }, { cwd = info.path })
+			end
 		end
 	end,
 })
 
 local builtin = require("telescope.builtin")
 vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "Telescope find files" })
-vim.keymap.set("n", "<leader>fg", builtin.live_grep, { desc = "Telescope live grep" })
+vim.keymap.set("n", "<leader>fg", function()
+	builtin.live_grep({
+		prompt_title = "Live Grep",
+		additional_args = function()
+			return { "--engine=auto" }
+		end,
+	})
+end, { desc = "Telescope live grep" })
 vim.keymap.set("n", "<leader>fb", builtin.buffers, { desc = "Telescope buffers" })
 vim.keymap.set("n", "<leader>fh", builtin.help_tags, { desc = "Telescope help tags" })
 vim.keymap.set("n", "<leader>ft", builtin.treesitter, { desc = "Telescope Treesitter names" })
