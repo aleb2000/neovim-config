@@ -1,5 +1,6 @@
 vim.pack.add({
 	GH("nvim-treesitter/nvim-treesitter"),
+	GH("nvim-treesitter/nvim-treesitter-textobjects"),
 })
 
 local nvim_treesitter = require("nvim-treesitter")
@@ -55,3 +56,17 @@ vim.api.nvim_create_user_command("TSStart", function(opts)
 	end
 	treesitter_start(filetype)
 end, { desc = "Manually start Treesitter for installed parsers" })
+
+-- Textobjects based movement
+vim.keymap.set({ "n", "x", "o" }, "]m", function()
+	require("nvim-treesitter-textobjects.move").goto_next_start("@function.outer", "textobjects")
+end)
+vim.keymap.set({ "n", "x", "o" }, "]M", function()
+	require("nvim-treesitter-textobjects.move").goto_next_end("@function.outer", "textobjects")
+end)
+vim.keymap.set({ "n", "x", "o" }, "[m", function()
+	require("nvim-treesitter-textobjects.move").goto_previous_start("@function.outer", "textobjects")
+end)
+vim.keymap.set({ "n", "x", "o" }, "[M", function()
+	require("nvim-treesitter-textobjects.move").goto_previous_end("@function.outer", "textobjects")
+end)
