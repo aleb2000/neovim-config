@@ -13,7 +13,13 @@ require("conform").setup({
 		go = { "gofmt" },
 	},
 	format_on_save = {
-		timeout_ms = 500,
+		timeout_ms = 1000,
 		lsp_format = "never",
+	},
+	formatters = {
+		black = {
+			append_args = { "--fast" },
+			timeout_ms = 1000,
+		},
 	},
 })
